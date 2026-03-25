@@ -1,0 +1,69 @@
+import pygame
+
+# Initialize pygame
+pygame.init()
+
+# Screen setup
+WIDTH, HEIGHT = 800, 600
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Rectangle Sprite Movement")
+
+# Colors
+WHITE = (255, 255, 255)
+BLUE = (0, 0, 255)   # Player
+RED = (255, 0, 0)    # Second sprite
+
+# Player (controlled rectangle)
+player_x = 100
+player_y = 100
+player_width = 60
+player_height = 60
+speed = 5
+
+# Second rectangle (static)
+rect2_x = 500
+rect2_y = 300
+rect2_width = 60
+rect2_height = 60
+
+# Game loop
+running = True
+while running:
+    screen.fill(WHITE)
+
+    # Event handling
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Key press handling
+    keys = pygame.key.get_pressed()
+
+    if keys[pygame.K_LEFT]:
+        player_x -= speed
+    if keys[pygame.K_RIGHT]:
+        player_x += speed
+    if keys[pygame.K_UP]:
+        player_y -= speed
+    if keys[pygame.K_DOWN]:
+        player_y += speed
+
+    # Keep player inside screen
+    if player_x < 0:
+        player_x = 0
+    if player_x > WIDTH - player_width:
+        player_x = WIDTH - player_width
+    if player_y < 0:
+        player_y = 0
+    if player_y > HEIGHT - player_height:
+        player_y = HEIGHT - player_height
+
+    # Draw rectangles
+    pygame.draw.rect(screen, BLUE, (player_x, player_y, player_width, player_height))
+    pygame.draw.rect(screen, RED, (rect2_x, rect2_y, rect2_width, rect2_height))
+
+    # Update display
+    pygame.display.update()
+
+# Quit pygame
+pygame.quit()
