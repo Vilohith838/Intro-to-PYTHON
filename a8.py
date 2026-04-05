@@ -1,79 +1,51 @@
-import pygame
-import random
+from tkinter  import *
+from tkinter.filedialog import askopenfilename, asksaveasfilename
 
-SCREEN_WIDTH, SCREEN_HEIGHT = 500, 400
-MOVEMENT_SPEED = 5
-FONT_SIZE = 72
+window = Tk()
+window.title("Codingal's text editor")
+window.geometry("600x500")
+window.rowconfigure(0, minsize=800, weight=1)
+window.columnconfigure(1, minsize=800, weight=1)
 
-pygame.init()
+def open_file():
+    """Open a file for editing. """
+    filepath = askopenfilename(
+        filetypes = [("Text Files", "*.txt"), ("All files", "*.*")]
+    )
+    if not filepath: 
+        return
+    txt_edit.delete(1.0, END)
+    with open(filepath, "r") as input_file:
 
-background_image = pygame.transform.scale(
-    pygame.image.load("bg.jpg"), 
-    (SCREEN_WIDTH, SCREEN_HEIGHT)
-)
+        text = input_file.read()
 
+        txt_edit.insert(END, text)
+        input_file.close()
+    window.title(f"Codingal's Text Editor - {filepath}")
 
-font = pygame.font.SysFont("Times new Roman", FONT_SIZE)
+def save_file():
 
-class Sprite(pygame.sprite.Sprite):
-    def __init__(self, color, height, width):
-        super().__init__() 
-        self.image = pygame.Surface([width, height])
-        
-        self.image.fill(pygame.Color('dodgerblue'))    
-        pygame.draw.rect(self.image, color, pygame.Rect(0, 0, width, height))
-        self.rect = self.image.get_rect()
+    filepath = asksaveasfilename(
+        defaultextension="txt",
+        filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")],
+    )
+    if not filepath: 
+        return
+    with open(filepath, "w") as output_file:
 
-    def move(self, x_change, y_change):
-       
-        self.rect.x = max(0, min(self.rect.x + x_change, SCREEN_WIDTH - self.rect.width))
-        self.rect.y = max(0, min(self.rect.y + y_change, SCREEN_HEIGHT - self.rect.height))
+        text = txt_edit.get(1.0, END)
+        output_file.write(text)
+    window.title(f"Codingal's Text Editor - {filepath}") 
 
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Sprite Collision")
-all_sprites = pygame.sprite.Group()
+txt_edit = Text(window)
+fr_buttons = Frame(window, relief=RAISED, bd=2)
+btn_open = Button(fr_buttons, text="open", command=open_file)
+btn_save = Button(fr_buttons, text="Save As....", command=save_file)
 
+btn_open.grid(row=0, column=0, sticky="ew", padx=5, pady=5)
+btn_open.grid(row=0, column=0, sticky="ew", padx=5)
 
-sprite1 = Sprite(pygame.Color('black'), 20, 30)
-sprite1.rect.x = random.randint(0, SCREEN_WIDTH - sprite1.rect.width)
-sprite1.rect.y = random.randint(0, SCREEN_HEIGHT - sprite1.rect.height)
-all_sprites.add(sprite1)
+fr_buttons.grid(row=0, column=0, sticky="ns")
+txt_edit.grid(row=0, column=1, sticky="nsew")
 
-
-sprite2 = Sprite(pygame.Color('red'), 20, 30)
-sprite2.rect.x = random.randint(0, SCREEN_WIDTH - sprite2.rect.width)
-sprite2.rect.y = random.randint(0, SCREEN_HEIGHT - sprite2.rect.height)
-all_sprites.add(sprite2)
-
-running, won = True, False
-clock = pygame.time.Clock()
-
-
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_x):
-            running = False
-
-    if not won:
-        keys = pygame.key.get_pressed()
-        x_change = (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * MOVEMENT_SPEED
-        y_change = (keys[pygame.K_DOWN] - keys[pygame.K_UP]) * MOVEMENT_SPEED
-        sprite1.move(x_change, y_change)
-
-        if sprite1.rect.colliderect(sprite2.rect):
-            all_sprites.remove(sprite2)
-            won = True
-
-    
-    screen.blit(background_image, (0, 0))
-    all_sprites.draw(screen)
-
-    if won:
-        win_text = font.render("You win!", True, pygame.Color('black'))
-        screen.blit(win_text, ((SCREEN_WIDTH - win_text.get_width()) // 2,
-                               (SCREEN_HEIGHT - win_text.get_height()) // 2))
-
-    pygame.display.flip()
-    clock.tick(90)
-
-pygame.quit()
+window.mainloop()
