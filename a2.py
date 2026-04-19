@@ -1,38 +1,14 @@
-from tkinter import *
-from datetime import date
+import pandas as pd
+import numpy as np
 
-root = Tk()
-root.title('getting started with widgets')
-root.geometry('400x300')
+exam_data = {'name': ['anastasia', 'Dima', 'Katherine', 'James',
+'Emily', 'michael', 'Mathew', 'Laura', 'Kevin', 'Jonas'],
+        'score': [12.5, 9, 16.5, np.nan, 9, 20, 14.5, np.nan, 8, 19],
+        'attempts': [1, 2, 3, 3, 2, 3, 1, 1, 2, 1],
+        'qualify': ['yes', 'no', 'yes', 'no', 'no', 'yes', 'yes',
+    'no', 'no', 'yes']}
+labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
 
-
-lb1 = Label(text="Hey There!", fg ="white", bg = "#072F5F",
-height = 1, width = 300)
-
-name_lb1 = Label(text="Full Nme!", bg = "#3895D3")
-name_entry = Entry()
-
-def display():
-
-    name = name_entry.get()
-
-    global Message
-    message = "Welcome to the Apllication! \n Today's date is: "
-    greet = "Home "+name+"\n"
-
-    text_box.insert(END, greet)
-    text_box.insert(END, message)
-    text_box.insert(END, date.today())
-
-text_box = Text(height=3)   
-
-btn = Button(text="Begin", command=display, height=1, 
-bg = "#1261A0" , fg="white")
-
-lb1.pack()
-name_lb1.pack()
-name_entry.pack()
-btn.pack()
-text_box.pack()
-
-root.mainloop()
+df = pd.DataFrame(exam_data, index=labels)
+print("Summary of the basic information about this data frame and it's data:")
+print(df.info())
