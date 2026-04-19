@@ -1,40 +1,15 @@
-import tkinter as tk
-from tkinter import messagebox
 
-def calculate_product():
-    try:
-        num1 = float(entry1.get())
-        num2 = float(entry2.get())
-        product = num1 * num2
-        result_label.config(text=f"Product: {product}")
-    except ValueError:
-        messagebox.showerror("Invalid input", "Please enter valid numbers")
+import pandas as pd
+import numpy as np
 
-# Create main window
-root = tk.Tk()
-root.title("Product Calculator")
-root.geometry("300x200")
+data = {
+    'Transaction_ID': [101, 102, 103, 104, 105, 106],
+    'Date': ['2023-01-01', '2023-01-02', '2023-01-02', '2023-01-03', '2023-01-03', np.nan],
+    'Product': ['Laptop', 'Mouse', 'Monitor', 'Mouse', 'Laptop', 'Monitor'],
+    'Price': [1200, 25, np.nan, 25, 1200, 300],
+    'Quantity': [1, 2, 1, 3, 1, 1],
+    'Store_Location': ['NY', 'CA', 'NY', 'TX', 'CA', 'TX'],
+    'Unnecessary_Notes': ['N/A', 'Check', 'None', 'Paid', 'N/A', 'Flag']
+}
 
-# Labels and Entry widgets
-label1 = tk.Label(root, text="Enter first number:")
-label1.pack(pady=5)
-
-entry1 = tk.Entry(root)
-entry1.pack(pady=5)
-
-label2 = tk.Label(root, text="Enter second number:")
-label2.pack(pady=5)
-
-entry2 = tk.Entry(root)
-entry2.pack(pady=5)
-
-# Button to calculate product
-calc_button = tk.Button(root, text="Calculate Product", command=calculate_product)
-calc_button.pack(pady=10)
-
-# Label to display result
-result_label = tk.Label(root, text="Product: ")
-result_label.pack(pady=5)
-
-# Run the application
-root.mainloop()
+df = pd.DataFrame(data)
