@@ -1,24 +1,30 @@
-from tkinter import *
+import matplotlib.pyplot as plt
 
-root = Tk()
-root.title("Number Pad")
-root.geometry("400x300")
+students_names =["Wasim", "Rahul", "Karan", "Wasim", "Ramesh", "Ajay", "Sartaj",
+    "Priya"]
+students_marks = [35,50,20,45,25,40,25,40]
 
-nums = [[9, 8, 7], [6, 5, 4], [3, 2, 1], ['#', 0, '*']]
+mark_perc = []
+for x in students_marks:
+    res  = (x/50)*100
+    mark_perc.append(res)
 
-for i in range(4):
+print(mark_perc)
 
-    root.columnconfigure(i, weight=1, minsize=75)
-    root.rowconfigure(i, weight=1, minsize=50)
-    for j in range(0, 3):
-        frame = Frame(
-            master=root,
-            relief=SUNKEN,
-            borderwidth=1
-        )
-        frame.grid(row=i, column=j)
-        label = Label(master=frame, text=nums[i][j],
-bg='#d0efff')
-        label.pack(padx=3, pady=3)
+def marks_line_chart():
+  plt.plot(students_names,students_marks)
+  plt.title("students marks graph")
+  plt.xlabel("Students Names")
+  plt.ylabel("Students Marks")
+  plt.show()
 
-root.mainloop()
+marks_line_chart()  
+
+def percentage_bar_chart():
+  plt.bar(students_names,students_perc)
+  plt.title("Students percentage graph") 
+  plt.xlabel("Students Names")
+  plt.ylabel("Students Percentage")
+  plt.show()           
+
+percentage_bar_chart()  
