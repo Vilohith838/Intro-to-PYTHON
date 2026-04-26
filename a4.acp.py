@@ -1,36 +1,35 @@
-import tkinter as tk
-from datetime import datetime
+import seaborn as sns
+import matplotlib.pyplot as plt
 
-def calculate_age():
-    try:
-        d = int(day_entry.get())
-        m = int(month_entry.get())
-        y = int(year_entry.get())
-        birth_date = datetime(y, m, d)
-        today = datetime.today()
-        age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
-        result_label.config(text="Age: " + str(age))
-    except:
-        result_label.config(text="Invalid input")
+df = sns.load_dataset('iris')
 
-root = tk.Tk()
-root.title("Age Calculator")
+sns.set_theme(style="whitegrid")
 
-tk.Label(root, text="Day").grid(row=0, column=0)
-tk.Label(root, text="Month").grid(row=1, column=0)
-tk.Label(root, text="Year").grid(row=2, column=0)
+# 1. Distribution Plot (Histogram + KDE)
+plt.figure(figsize=(8, 5))
+sns.histplot(data=df, x="sepal_length", kde=True, color="skyblue")
+plt.title("Univariate Distribution of Sepal Length")
+plt.show()
 
-day_entry = tk.Entry(root)
-month_entry = tk.Entry(root)
-year_entry = tk.Entry(root)
+# 2. Scatter Plot (Relationship between two variables)
+plt.figure(figsize=(8, 5))
+sns.scatterplot(data=df, x="sepal_length", y="sepal_width", hue="species", style="species")
+plt.title("Bivariate Relationship: Sepal Length vs Width")
+plt.show()
 
-day_entry.grid(row=0, column=1)
-month_entry.grid(row=1, column=1)
-year_entry.grid(row=2, column=1)
+# 3. Box Plot (Visualizing Statistical Outliers and Quartiles)
+plt.figure(figsize=(8, 5))
+sns.boxplot(data=df, x="species", y="petal_length", palette="Set2")
+plt.title("Petal Length Distribution by Species")
+plt.show()
 
-tk.Button(root, text="Calculate Age", command=calculate_age).grid(row=3, column=0, columnspan=2)
+# 4. Pair Plot (Matrix of all numerical relationships)
+sns.pairplot(df, hue="species", corner=True)
+plt.show()
 
-result_label = tk.Label(root, text="")
-result_label.grid(row=4, column=0, columnspan=2)
-
-root.mainloop()
+# 5. Heatmap (Correlation Matrix)
+plt.figure(figsize=(8, 6))
+correlation_matrix = df.drop(columns='species').corr()
+sns.heatmap(correlation_matrix, annot=True, cmap="YlGnBu")
+plt.title("Feature Correlation Heatmap")
+plt.show()
