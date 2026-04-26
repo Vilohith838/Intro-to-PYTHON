@@ -1,43 +1,21 @@
-from tkinter import *
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-root = Tk()
-root.title('Login App')
-root.geometry("400x300")
+df = pd.read_csv("USA_Housing.csv")
 
-frame = Frame(master=root, height=200, width=200, bg='#d0efff')
+print(df.head(10))
 
-lbl1= Label(frame, text = 'Full Name', bg='#3895D3', fg='white',
-width=12)
+print(df.info())
 
-lbl2= Label(frame, text = 'Email ID', bg='#3895D3', fg='white',
-width=12)
+print(df.describe())
 
-lbl3= Label(frame, text = 'Enter Password', bg='#3895D3',
-fg='white', width=12)
+print(df.columns)
 
-name_entry = Entry(frame)
-email_entry = Entry(frame)
-pass_entry = Entry(frame, show="*")
+sns.pairplot(df.select_dtypes(include=[np.number]))
 
-def display():
-    name = name_entry.get()
-    greet = "Hey "+name
-    message  = "\nCongratulations for your new account!"
-    textbox.insert(END, greet)      
-    textbox.insert(END, message)
+sns.heatmap(df.select_dtypes(include=[np.number]).corr(),
+annot=True)
 
-textbox = Text(bg="#BEBEBE", fg="black")
-
-btn = Button(text="Create Account", command=display, bg="red")
-
-frame.place(x=20, y=0)
-lbl1.place(x=20, y=20)
-name_entry.place(x=150, y=20)
-lbl2.place(x=20, y=80)
-email_entry.place(x=150, y=80)
-lbl3.place(x=20, y=140)
-pass_entry.place(x=150, y=140)
-btn.place(x=130, y=210)
-textbox.place(y=250)
-
-root.mainloop()          
+plt.show()
