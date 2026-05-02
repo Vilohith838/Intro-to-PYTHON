@@ -1,21 +1,47 @@
-from tkinter import *
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
-window = Tk()
-window.title("Event Handler")
-window.geometry("100x100")
+sns.set(style="ticks")
 
-def handle_keypress(event):
-    """print the character associated to the key pressed"""
-    print(event.char)
+weather = pd.read_csv('Test.csv')
 
-window.bind("<Key>", handle_keypress)
+print(weather.head())
 
-def handle_click(event):
-    print("\nThe button was clicked!")
+print(weather.info())
 
-button = Button(text="click me!")
-button.pack()
+sns.barplot(x=weather['humidity'], y=weather['temperature'])
 
-button.bind("<Button-1>", handle_click)
+sns.displot(weather['humidity'])
+plt.show()
 
-window.mainloop()
+sns.displot(weather['humidity'], kde=False, rug=True)
+plt.show()
+
+sns.jointplot(x=weather['humidity'], y=weather['temperature'])
+plt.show()
+
+sns.jointplot(x=weather['humidity'], y=weather['temperature'], kind="hex")
+plt.show()
+
+sns.jointplot(x=weather['humidity'], y=weather['temperature'], kind="kde")
+plt.show()
+
+sns.pairplot([['humidty', 'temperature', 'air_pollution.index']])
+plt.show()
+
+sns.stripplot(x=weather['weather_type'], y=weather['temperature'], jitter="True")
+plt.show()
+
+sns.swarmplot(x=weather['humidity'], y=weather['temperature'])
+plt.show()
+
+sns.barplot(x=weather['humidity'], y=weather['temperature'], 
+hue=weather['weather_type'])
+plt.show()
+
+sns.countplot(x=weather['humidity'])
+
+sns.pointplot(x=weather['humidity'], y=weather['temperature'], 
+hue=weather['weather_type'])
+plt.show()
